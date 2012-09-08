@@ -11,10 +11,10 @@
 
 
 	
-<project name="SAMAT" default="archive" basedir=".">
+<project name="ESAMAT" default="archive" basedir=".">
 	
     <description>
-           SAMAT
+           ESAMAT
     </description>
 	
 	<property file="build.properties"/>

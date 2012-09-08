@@ -33,6 +33,7 @@ import javax.swing.UIManager;
 import sam_controller.AddButtonHandler;
 import sam_controller.AnalysisModuleHandler;
 import sam_controller.FileHandler;
+import sam_controller.SpinPopupHandler;
 import sam_model.Component;
 import sam_model.SamModel;
 import sam_model.XMLTransformer;
@@ -99,6 +100,7 @@ public class SamFrame extends JFrame {
 	
 	//buttons for model analysis
 	private JButton btnModelToPromela;
+	private JButton btnSpin;
 
 	private final JTabbedPane pane = new JTabbedPane();
 
@@ -510,6 +512,16 @@ public class SamFrame extends JFrame {
 		toolBarAnalysis.setToolTipText("Convert Elementary Level Petri Net to Promela");
 		btnModelToPromela.setName("btnModelToPromela");
 		btnModelToPromela.addActionListener(btnHandler);
+		
+		SpinPopupHandler btnSpinHandler = new SpinPopupHandler();
+		
+		btnSpin = new JButton("");
+		btnSpin.setIcon(new ImageIcon(SamFrame.class.getResource("/sam_view/resources/spinlogosmall.PNG")));
+		btnSpin.setBackground(SystemColor.menu);
+		toolBarAnalysis.add(btnSpin);
+		toolBarAnalysis.setToolTipText("Use SPIN");
+		btnSpin.setName("btnSpin");
+		btnSpin.addActionListener(btnSpinHandler);
 		
 		
 	}
