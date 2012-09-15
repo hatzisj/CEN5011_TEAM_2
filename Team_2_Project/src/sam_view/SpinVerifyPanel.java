@@ -6,6 +6,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 
+import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.border.LineBorder;
@@ -18,6 +19,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+
+import sam_controller.SpinVerifyHandler;
+import sam_model.SpinCommands;
 
 public class SpinVerifyPanel extends JScrollPane {
 	// singleton instance of SpinSimulatePanel
@@ -100,11 +104,11 @@ public class SpinVerifyPanel extends JScrollPane {
 		
 		setUpOptions();
 		
-		txtOutput = new JTextArea("Verification Output:");
+		txtOutput = new JTextArea("PML File:");
 		txtOutput.setBackground(Color.BLACK);
 		txtOutput.setForeground(Color.WHITE);
 		
-		txtCommandLine = new JTextArea("Command line:");
+		txtCommandLine = new JTextArea("Verification Result:");
 		txtCommandLine.setBackground(Color.BLACK);
 		txtCommandLine.setForeground(Color.WHITE);
 		JPanel innerPanel = new JPanel();
@@ -169,7 +173,7 @@ public class SpinVerifyPanel extends JScrollPane {
 		label.setBorder(border);
 		label.setHorizontalAlignment(SwingConstants.CENTER);
 		btnDepth = new JRadioButton("Depth-first search",true);
-		cbDepthPartialOrder = new JCheckBox("+partial order reduction");
+		cbDepthPartialOrder = new JCheckBox("+partial order reduction",true);
 		cbBounded = new JCheckBox("+bounded context switching, with bound:");
 		tfBound = new JTextField("0");
 		innerPanel.add(label);
@@ -216,8 +220,8 @@ public class SpinVerifyPanel extends JScrollPane {
 		innerPanel.setLayout(new GridLayout(4,1));
 		cbIterative = new JCheckBox("+iterative search for short trail");
 		btnBreadth = new JRadioButton("Breadth-first search");
-		cbBreadthPartialOrder = new JCheckBox("+partial order reduction");
-		cbReportUnreachable = new JCheckBox("report unreachable code");
+		cbBreadthPartialOrder = new JCheckBox("+partial order reduction",true);
+		cbReportUnreachable = new JCheckBox("report unreachable code",true);
 		innerPanel.add(cbIterative);
 		innerPanel.add(btnBreadth);
 		innerPanel.add(cbBreadthPartialOrder);
@@ -242,7 +246,6 @@ public class SpinVerifyPanel extends JScrollPane {
 		buttonGroupNeverClaims.add(btnDoNotUseClaim);
 		buttonGroupNeverClaims.add(btnUseClaim);		
 		
-		btnRun = new JButton("Run");
 
 		optionsPanel.setBackground(Color.WHITE);
 		innerPanel = new JPanel();
@@ -252,7 +255,7 @@ public class SpinVerifyPanel extends JScrollPane {
 		JPanel southPanel = new JPanel(new BorderLayout(0,0));
 		
 		buttonGroupGcc = new ButtonGroup();;
-		btnGcc = new JRadioButton("gcc");
+		btnGcc = new JRadioButton("gcc",true);
 		btnGcc3 = new JRadioButton("gcc-3");
 		btnGcc4 = new JRadioButton("gcc-4");
 		buttonGroupGcc.add(btnGcc);
@@ -262,10 +265,63 @@ public class SpinVerifyPanel extends JScrollPane {
 		gccPanel.add(btnGcc);
 		gccPanel.add(btnGcc3);
 		gccPanel.add(btnGcc4);
+		
+		btnRun = new JButton("Run");
+		btnRun.addActionListener(setUpListener());
+		
 		southPanel.add(gccPanel,BorderLayout.CENTER);
 		southPanel.add(btnRun,BorderLayout.SOUTH);
 		innerPanel.add(southPanel,BorderLayout.SOUTH);
 		
 		panel.add(innerPanel,BorderLayout.NORTH);
+	}
+	
+	private AbstractAction setUpListener()
+	{
+		AbstractAction handler = new SpinVerifyHandler();
+
+		handler.putValue(SpinCommands.SAFETY,btnSafety);
+		handler.putValue(SpinCommands.INVALID_ENDSTATES,cbInvalidEndStates);
+		handler.putValue(SpinCommands.ASSERTION_VIOLATIONS,cbAssertionViolations);
+		handler.putValue(SpinCommands.ASSERTIONS,cbAssertions);
+		handler.putValue(SpinCommands.EXHAUSTIVE,btnExhaustive);
+		handler.putValue(SpinCommands.HASH_COMPACT,btnHashCompact);
+		handler.putValue(SpinCommands.BIT_STATE,btnBitstate);
+		handler.putValue(SpinCommands.MINIMIZED_AUTOMATA,cbMinimizedAutomata);
+		handler.putValue(SpinCommands.COLLAPSE_COMPRESSION,cbCollapseCompression);
+		handler.putValue(SpinCommands.DEPTH_FIRST,btnDepth);
+		handler.putValue(SpinCommands.BREADTH_FIRST,btnBreadth);
+		handler.putValue(SpinCommands.DEPTH_PARTIAL_ORDER,cbDepthPartialOrder);
+		handler.putValue(SpinCommands.BOUNDED,cbBounded);
+		handler.putValue(SpinCommands.BOUNDED_VALUE,tfBound);
+		handler.putValue(SpinCommands.ITERATIVE,cbIterative);
+		handler.putValue(SpinCommands.BREADH_PARTIAL_ORDER,cbBreadthPartialOrder);
+		handler.putValue(SpinCommands.REPORT_UNREACHABLE,cbReportUnreachable);
+		handler.putValue(SpinCommands.NON_PROGRESS,btnNonProgress);
+		handler.putValue(SpinCommands.ACCEPTANCE,btnAcceptance);
+		handler.putValue(SpinCommands.ENFORCE_WEAK,cbEnforceWeak);
+		handler.putValue(SpinCommands.DO_NOT_USE_CLAIM,btnDoNotUseClaim);
+		handler.putValue(SpinCommands.USE_CLAIM,btnUseClaim);
+		handler.putValue(SpinCommands.CLAIM,tfClaim);
+		handler.putValue(SpinCommands.GCC,btnGcc);
+		handler.putValue(SpinCommands.GCC_3,btnGcc3);
+		handler.putValue(SpinCommands.GCC_4,btnGcc4);
+		
+		return handler;
+	}
+	
+	public void setFileText(String text)
+	{
+		txtOutput.setText(text);
+	}
+	
+	public void setCommandLineText(String text)
+	{
+		txtCommandLine.setText(text);
+	}
+	
+	public void appendCommandLineText(String text)
+	{
+		txtCommandLine.setText(txtCommandLine.getText() + "\n" + text);
 	}
 }

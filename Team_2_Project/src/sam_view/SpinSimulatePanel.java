@@ -6,6 +6,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 
+import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.border.LineBorder;
@@ -17,6 +18,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+
+import sam_model.SpinCommands;
+import sam_controller.SpinSimulateHandler;
 
 public class SpinSimulatePanel extends JScrollPane {
 	// singleton instance of SpinSimulatePanel
@@ -135,6 +139,7 @@ public class SpinSimulatePanel extends JScrollPane {
 		optionsPanel.add(innerPanel);
 		
 		btnRun = new JButton("Run the simulation");
+		btnRun.addActionListener(setUpListener());
 		
 		innerPanel = new JPanel();
 		innerPanel.setLayout(new BorderLayout(0,0));
@@ -142,5 +147,44 @@ public class SpinSimulatePanel extends JScrollPane {
 		innerPanel.add(btnRun,BorderLayout.SOUTH);
 		
 		panel.add(innerPanel,BorderLayout.NORTH);
+	}
+	
+	public void setTrailFile(String file)
+	{
+		txtTrail.setText(file);
+	}
+	
+	private AbstractAction setUpListener()
+	{
+		AbstractAction handler = new SpinSimulateHandler();
+		handler.putValue(SpinCommands.RANDOM_WITH_SEED,btnRandomWithSeed);
+		handler.putValue(SpinCommands.SEED_VALUE,txtSeed);
+		handler.putValue(SpinCommands.INTERACTIVE,btnInteractive);
+		handler.putValue(SpinCommands.GUIDED_WITH_TRAIL,btnGuidedWithTrail);
+		handler.putValue(SpinCommands.TRAIL_FILE,txtTrail);
+		handler.putValue(SpinCommands.BLOCKS_NEW_MESSAGE,btnBlocksNewMessages);
+		handler.putValue(SpinCommands.LOSES_NEW_MESSAGE,btnLosesNewMessages);
+		
+		return handler;
+	}
+	
+	public void setCommandLineText(String text)
+	{
+		txtCommandLine.setText(text);
+	}
+	
+	public void appendCommandLineText(String text)
+	{
+		txtCommandLine.setText(txtCommandLine.getText()+"\n"+text);
+	}
+	
+	public void setOutputText(String text)
+	{
+		txtOutput.setText(text);
+	}
+	
+	public JTextArea getOutputText()
+	{
+		return txtOutput;
 	}
 }
