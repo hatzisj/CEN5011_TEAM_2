@@ -23,7 +23,8 @@ public class SpinSimulateHandler extends AbstractAction {
 		String command = model.getSimulateCommands(options);
 		panel.setCommandLineText(command);
 		panel.setOutputText("");
-		ProcessRunner.run(command,panel.getOutputText(),true);
+		String output = ProcessRunner.run(command,panel.getOutputText(),false);
+		panel.setOutputText(output);
 	}
 	
 	//finds out all of the options that have been selected

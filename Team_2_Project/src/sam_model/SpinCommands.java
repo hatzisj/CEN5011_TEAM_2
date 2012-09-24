@@ -37,6 +37,7 @@ public class SpinCommands {
 	public static final String SEED_VALUE = "seedValue";
 	public static final String INTERACTIVE = "interactive";
 	public static final String GUIDED_WITH_TRAIL = "guidedWithTrail";
+	public static final String SIMPLE_WITH_TRAIL = "simpleWithTrail";
 	public static final String TRAIL_FILE = "trailFile";
 	public static final String BLOCKS_NEW_MESSAGE = "blocksNewMessage";
 	public static final String LOSES_NEW_MESSAGE = "losesNewMessage";
@@ -69,7 +70,7 @@ public class SpinCommands {
 		panOptions.put(ITERATIVE," -i");
 		panOptions.put(NON_PROGRESS," -E -A -I");
 		panOptions.put(ACCEPTANCE," -E -A -a");
-		panOptions.put(ENFORCE_WEAK," -f");
+		panOptions.put(ENFORCE_WEAK," -f -l");
 		panOptions.put(USE_CLAIM," -N");
 		panOptions.put(ITERATIVE," -i");
 		panOptions.put(REPORT_UNREACHABLE," -n");

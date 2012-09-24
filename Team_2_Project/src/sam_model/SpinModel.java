@@ -7,11 +7,15 @@ import java.io.FileReader;
 import java.io.IOException;
 
 import java.util.Properties;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 
 public class SpinModel {
 
 	private static SpinModel spinModel;
 	private String commandString;
+	private String verErrors;
+	private String verTotalMemory;
 	
 	private File promelaFile;
 	
@@ -58,6 +62,26 @@ public class SpinModel {
 	public String getCommandString()
 	{
 		return commandString;
+	}
+	
+	public void setVerErrors(String str)
+	{
+		verErrors = str;
+	}
+	
+	public String getVerErrors()
+	{
+		return verErrors;
+	}
+	
+	public void setVerTotalMemory(String str)
+	{
+		verTotalMemory = str;
+	}
+	
+	public String getVerTotalMemory()
+	{
+		return verTotalMemory;
 	}
 	
 	public String[] getVerifyCommands(Properties options)
@@ -181,6 +205,10 @@ public class SpinModel {
 		{
 			command += " -k " + options.getProperty(SpinCommands.TRAIL_FILE);
 		}
+		else if( options.getProperty(SpinCommands.SIMPLE_WITH_TRAIL).equals("true") )
+		{
+			command = "spin -r -s -k " + options.getProperty(SpinCommands.TRAIL_FILE);
+		}
 		
 		if( options.getProperty(SpinCommands.LOSES_NEW_MESSAGE).equals("true"))
 		{
@@ -189,6 +217,24 @@ public class SpinModel {
 		
 		command += " \"" + promelaFile.getPath() + "\"";
 		return command;
+	}
+	
+	public void extractVerificationInfo(String input)
+	{
+		//find how many errors there are
+		Pattern p = Pattern.compile("errors:\\s+([0-9]+)");
+		Matcher m = p.matcher(input);
+		if(m.find()) verErrors = m.group(1);
+		else verErrors = "0";
+		
+		//find the total memory usage
+		p = Pattern.compile("([0-9]+\\.*[0-9]*)\\s+total\\sactual\\smemory\\susage");
+		m = p.matcher(input);
+		if(m.find()) verTotalMemory = m.group(1);
+		else verTotalMemory = "";
+
+		System.out.println("Errors: " + verErrors);
+		System.out.println("Total memory usage " + verTotalMemory);
 	}
 
 }

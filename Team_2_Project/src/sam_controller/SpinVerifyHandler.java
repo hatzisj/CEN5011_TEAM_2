@@ -21,11 +21,16 @@ public class SpinVerifyHandler extends AbstractAction {
 		SpinModel model = SpinModel.getInstance();
 		SpinVerifyPanel panel = SpinVerifyPanel.getInstance();
 		String[] commands = model.getVerifyCommands(options);
+		String output = "";
+		panel.setCommandLineText("");
 		for( String command : commands )
 		{
 			panel.appendCommandLineText(command);
-			panel.appendCommandLineText(ProcessRunner.run(command,null,false));
+			String curOutput = ProcessRunner.run(command,null,false);
+			panel.appendCommandLineText(curOutput);
+			output += curOutput;
 		}
+		model.extractVerificationInfo(output);
 	}
 	
 	//finds out all of the options that have been selected

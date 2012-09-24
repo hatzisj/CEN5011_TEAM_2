@@ -26,10 +26,6 @@ public class ProcessRunner {
 					area.setText(area.getText()+"\n"+line);
 			}
 			bri.close();
-			while ((line = bre.readLine()) != null) {
-				System.out.println(line);
-			}
-			bre.close();
 			p.waitFor();
 			
 	    }

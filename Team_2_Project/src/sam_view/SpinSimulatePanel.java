@@ -34,6 +34,7 @@ public class SpinSimulatePanel extends JScrollPane {
 	private JTextField txtSeed;
 	private JRadioButton btnInteractive;
 	private JRadioButton btnGuidedWithTrail;
+	private JRadioButton btnSimpleWithTrail;
 	private JTextField txtTrail;
 	private JTextArea txtOutput;
 	private JButton btnRun;
@@ -105,8 +106,10 @@ public class SpinSimulatePanel extends JScrollPane {
 		txtSeed.setBorder(border);
 		btnInteractive = new JRadioButton("Interactive");
 		btnInteractive.setBorder(border);
-		btnGuidedWithTrail = new JRadioButton("Guided,with trail",true);
+		btnGuidedWithTrail = new JRadioButton("Guided,with trail");
 		btnGuidedWithTrail.setBorder(border);
+		btnSimpleWithTrail = new JRadioButton("Simple queue output,with trail, used for creating graphical rep.",true);
+		btnSimpleWithTrail.setBorder(border);
 		txtTrail = new JTextField();
 		txtTrail.setBorder(border);
 		buttonGroupChannel = new ButtonGroup();
@@ -118,6 +121,7 @@ public class SpinSimulatePanel extends JScrollPane {
 		buttonGroupMode.add(btnRandomWithSeed);
 		buttonGroupMode.add(btnInteractive);
 		buttonGroupMode.add(btnGuidedWithTrail);
+		buttonGroupMode.add(btnSimpleWithTrail);
 		
 		buttonGroupChannel.add(btnBlocksNewMessages);
 		buttonGroupChannel.add(btnLosesNewMessages);
@@ -127,9 +131,11 @@ public class SpinSimulatePanel extends JScrollPane {
 		innerPanel.add(btnRandomWithSeed);innerPanel.add(txtSeed);
 		optionsPanel.add(innerPanel);
 		
+		
 		optionsPanel.add(btnBlocksNewMessages);
 		
-		optionsPanel.add(btnInteractive);
+		//optionsPanel.add(btnInteractive);
+		optionsPanel.add(btnSimpleWithTrail);
 		
 		optionsPanel.add(btnLosesNewMessages);
 		
@@ -161,6 +167,7 @@ public class SpinSimulatePanel extends JScrollPane {
 		handler.putValue(SpinCommands.SEED_VALUE,txtSeed);
 		handler.putValue(SpinCommands.INTERACTIVE,btnInteractive);
 		handler.putValue(SpinCommands.GUIDED_WITH_TRAIL,btnGuidedWithTrail);
+		handler.putValue(SpinCommands.SIMPLE_WITH_TRAIL,btnSimpleWithTrail);
 		handler.putValue(SpinCommands.TRAIL_FILE,txtTrail);
 		handler.putValue(SpinCommands.BLOCKS_NEW_MESSAGE,btnBlocksNewMessages);
 		handler.putValue(SpinCommands.LOSES_NEW_MESSAGE,btnLosesNewMessages);
