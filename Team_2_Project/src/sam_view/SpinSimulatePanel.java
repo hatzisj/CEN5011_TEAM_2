@@ -38,6 +38,7 @@ public class SpinSimulatePanel extends JScrollPane {
 	private JTextField txtTrail;
 	private JTextArea txtOutput;
 	private JButton btnRun;
+	private JButton btnRunWithGraph;
 	private JTextArea txtCommandLine;
 	
 	
@@ -145,12 +146,18 @@ public class SpinSimulatePanel extends JScrollPane {
 		optionsPanel.add(innerPanel);
 		
 		btnRun = new JButton("Run the simulation");
-		btnRun.addActionListener(setUpListener());
+		btnRun.addActionListener(setUpListener(false));
+		
+		btnRunWithGraph = new JButton("Run the simulation and produce a graphical representation");
+		btnRunWithGraph.addActionListener(setUpListener(true));;
 		
 		innerPanel = new JPanel();
 		innerPanel.setLayout(new BorderLayout(0,0));
 		innerPanel.add(optionsPanel);
-		innerPanel.add(btnRun,BorderLayout.SOUTH);
+		JPanel btnPanel = new JPanel();
+		btnPanel.setLayout(new GridLayout(1,2));
+		btnPanel.add(btnRun);btnPanel.add(btnRunWithGraph);
+		innerPanel.add(btnPanel,BorderLayout.SOUTH);
 		
 		panel.add(innerPanel,BorderLayout.NORTH);
 	}
@@ -160,9 +167,9 @@ public class SpinSimulatePanel extends JScrollPane {
 		txtTrail.setText(file);
 	}
 	
-	private AbstractAction setUpListener()
+	private AbstractAction setUpListener(boolean graph)
 	{
-		AbstractAction handler = new SpinSimulateHandler();
+		AbstractAction handler = new SpinSimulateHandler(graph);
 		handler.putValue(SpinCommands.RANDOM_WITH_SEED,btnRandomWithSeed);
 		handler.putValue(SpinCommands.SEED_VALUE,txtSeed);
 		handler.putValue(SpinCommands.INTERACTIVE,btnInteractive);

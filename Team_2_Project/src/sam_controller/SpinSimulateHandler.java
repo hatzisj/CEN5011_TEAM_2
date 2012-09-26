@@ -7,6 +7,7 @@ import java.util.Properties;
 
 import javax.swing.AbstractAction;
 import javax.swing.JCheckBox;
+import javax.swing.JOptionPane;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
@@ -14,17 +15,38 @@ import sam_model.SpinModel;
 import sam_view.SpinSimulatePanel;
 
 public class SpinSimulateHandler extends AbstractAction {
-		
+	
+	//whether or not the user wants to create a graph
+	private boolean graph;
+	
+	public SpinSimulateHandler(boolean graph)
+	{
+		super();
+		this.graph = graph;
+	}
+	
 	public void actionPerformed(ActionEvent e) {
-			
-		Properties options = getOptions();
-		SpinModel model = SpinModel.getInstance();
-		SpinSimulatePanel panel = SpinSimulatePanel.getInstance();
-		String command = model.getSimulateCommands(options);
-		panel.setCommandLineText(command);
-		panel.setOutputText("");
-		String output = ProcessRunner.run(command,panel.getOutputText(),false);
-		panel.setOutputText(output);
+		try
+		{
+			Properties options = getOptions();
+			SpinModel model = SpinModel.getInstance();
+			SpinSimulatePanel panel = SpinSimulatePanel.getInstance();
+			String command = model.getSimulateCommands(options);
+			panel.setCommandLineText(command);
+			panel.setOutputText("");
+			String output = ProcessRunner.run(command,panel.getOutputText(),false);
+			panel.setOutputText(output);
+			model.setSimOutput(output);
+			if( graph )
+			{
+				model.createSimGraph();
+			}
+		}
+		catch(Exception exc)
+		{
+			exc.printStackTrace();
+			JOptionPane.showMessageDialog(null,exc.getMessage(),"Error Encountered",JOptionPane.ERROR_MESSAGE);
+		}
 	}
 	
 	//finds out all of the options that have been selected

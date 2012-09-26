@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.io.File;
 
 import javax.swing.AbstractAction;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 import sam_model.SpinModel;
@@ -32,8 +33,14 @@ public class SpinFileHandler extends AbstractAction {
 		SpinVerifyPanel verifyPanel = SpinVerifyPanel.getInstance();
 		SpinSimulatePanel simulatePanel = SpinSimulatePanel.getInstance();
 		model.setFile( new File(dlg.getDirectory() + dlg.getFile()) );
-		filePanel.setText(model.getFileText());
-		verifyPanel.setFileText(model.getFileText());
+		try
+		{
+			filePanel.setText(model.getFileText());
+		}
+		catch(Exception exc)
+		{
+			JOptionPane.showMessageDialog(null,exc.getMessage(),"Error Encountered",JOptionPane.ERROR_MESSAGE);
+		}
 		simulatePanel.setTrailFile(dlg.getFile()+".trail");
 	}
 

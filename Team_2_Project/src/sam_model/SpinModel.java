@@ -3,6 +3,7 @@ package sam_model;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
@@ -13,11 +14,14 @@ import java.util.regex.Matcher;
 public class SpinModel {
 
 	private static SpinModel spinModel;
+	private SpinGraph spinGraph;
 	private String commandString;
 	private String verErrors;
 	private String verTotalMemory;
+	private String fileText = null;
+	private String simOutput;
 	
-	private File promelaFile;
+	private File promelaFile = null;
 	
 	public static SpinModel getInstance()
 	{
@@ -34,24 +38,31 @@ public class SpinModel {
 		promelaFile = file;
 	}
 	
-	public String getFileText()
+	public String getFileText() throws Exception
 	{
-		String out = "";
-		try
+		if( fileText == null )
 		{
-
-			BufferedReader input = new BufferedReader(new FileReader(promelaFile));
-			String line ="";
-			while( ( line = input.readLine() ) != null )
+			if( promelaFile == null ) return null;
+			fileText = "";
+			try
 			{
-				out += line + "\n";
-			}	
+
+				BufferedReader input = new BufferedReader(new FileReader(promelaFile));
+				String line ="";
+				int counter = 1;
+				while( ( line = input.readLine() ) != null )
+				{
+					fileText += counter + ":  " + line + "\n";
+					counter++;
+				}	
+			}
+			catch(IOException e)
+			{
+				throw( new Exception("There was a problem reading the file") );
+			}
 		}
-		catch(IOException e)
-		{
-			e.printStackTrace();
-		}
-		return out;
+		return fileText;
+		
 	}
 	
 	public void setCommandString(String s)
@@ -84,10 +95,34 @@ public class SpinModel {
 		return verTotalMemory;
 	}
 	
-	public String[] getVerifyCommands(Properties options)
+	public void setSimOutput(String str)
+	{
+		simOutput = str;
+	}
+	
+	public String getSimOutput()
+	{
+		return simOutput;
+	}
+	
+	public String getVerOutput()
+	{
+		return "Errors: " + verErrors + "\r\n\r\n" +
+				"Total Memory: " + verTotalMemory + "\r\n\r\n";
+	}
+	
+	public String[] getVerifyCommands(Properties options) throws Exception
 	{
 		String[] commands = new String[3];
-		commands[0] = "spin -a \"" + promelaFile.getPath() + "\"";
+		try
+		{
+			commands[0] = "spin -a \"" + promelaFile.getPath() + "\"";
+		}
+		catch(NullPointerException n)
+		{
+			throw(new Exception("Please choose a file"));
+		}
+
 		String gcc = "gcc";
 		if( options.getProperty(SpinCommands.GCC_3).equals("true")) gcc = SpinCommands.GCC_3;
 		else if( options.getProperty(SpinCommands.GCC_4).equals("true")) gcc = SpinCommands.GCC_4;
@@ -193,7 +228,7 @@ public class SpinModel {
 		return commands;
 	}
 	
-	public String getSimulateCommands(Properties options)
+	public String getSimulateCommands(Properties options) throws Exception
 	{
 		String command = "spin -p -s -r -X -v -l -g -u10000";
 		
@@ -215,7 +250,15 @@ public class SpinModel {
 			command += " -m"; 
 		}
 		
-		command += " \"" + promelaFile.getPath() + "\"";
+		
+		try
+		{
+			command += " \"" + promelaFile.getPath() + "\"";
+		}
+		catch(NullPointerException n)
+		{
+			throw(new Exception("Please choose a file"));
+		}
 		return command;
 	}
 	
@@ -233,8 +276,70 @@ public class SpinModel {
 		if(m.find()) verTotalMemory = m.group(1);
 		else verTotalMemory = "";
 
-		System.out.println("Errors: " + verErrors);
-		System.out.println("Total memory usage " + verTotalMemory);
+	}
+	
+	public void createSimGraph() throws Exception
+	{
+		
+		spinGraph = new SpinGraph();
+		
+		String[] simSplit = simOutput.split("\n");
+		Pattern p = Pattern.compile("\\d+:\\s+proc");
+		Pattern patExtractor = Pattern.compile("\\s*[0-9]+:\\s*proc\\s*[0-9]+\\s*\\(([^)]*)\\)"
+				 + "[^:]*:[^:]*:([0-9]+)\\s*(\\S*)\\s+(\\S*)[^(]*\\([^_]*_([^)]*)\\)");
+		Pattern patExtractor2 = Pattern.compile("\\s*[0-9]+:\\s*proc\\s*[0-9]+\\s*\\(([^)]*)\\)"
+				 + "[^:]*:([0-9]+)\\s*(\\S*)\\s+(\\S*)[^(]*\\([^_]*_([^)]*)\\)");
+
+		//capture all of the relevant lines from the sim output and extract the appropriate info
+		for( String str : simSplit )
+		{
+			if( str.indexOf("START OF CYCLE")!=-1 ) break;
+			Matcher m = p.matcher(str);
+			if(!m.find()) continue;
+			m = patExtractor.matcher(str);
+			if(!m.find())
+			{
+				m = patExtractor2.matcher(str);
+				if(!m.find())continue;
+			}
+
+			//is this an initialize function or not?
+			boolean init = true;
+			if( !m.group(1).equals(":init:")) init = false;
+			
+			//what line number does it refer to in the .pml file?
+			String lineNum = m.group(2);
+			
+			//is this a send or receive action?
+			boolean send = true;
+			if( m.group(3).equals("Recv") ) send = false;
+			else if( m.group(3).equals("[Recv]") ) continue;
+			
+			//what are the values being sent/received?
+			String values = m.group(4);
+			
+			//what is the name of the place?
+			String place = m.group(5);
+			
+			SpinGraphElement element = new SpinGraphElement(init , Integer.parseInt(lineNum) , send , values , place );
+			spinGraph.addElement(element);
+		}
+		
+		/* using all of the places found in the sim output and their line numbers, we need to determine
+		 * what the name of the sender/receiver object is, first we will go through the .abp file in order
+		 * to find the rectangle names and all of their line numbers, then we will add the rectangles to
+		 * each element.
+		 */
+		
+		String fileText = getFileText();
+		
+		for( SpinGraphElement element : spinGraph.getElements() )
+		{
+			
+		}
+		
+
+		System.out.println(spinGraph);
 	}
 
 }

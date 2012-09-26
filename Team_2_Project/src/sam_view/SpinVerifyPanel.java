@@ -104,7 +104,7 @@ public class SpinVerifyPanel extends JScrollPane {
 		
 		setUpOptions();
 		
-		txtOutput = new JTextArea("PML File:");
+		txtOutput = new JTextArea();
 		txtOutput.setBackground(Color.BLACK);
 		txtOutput.setForeground(Color.WHITE);
 		
@@ -324,4 +324,10 @@ public class SpinVerifyPanel extends JScrollPane {
 	{
 		txtCommandLine.setText(txtCommandLine.getText() + "\n" + text);
 	}
+	
+	public void setOutputText(String text)
+	{
+		txtOutput.setText(text);
+	}
+	
 }

@@ -7,6 +7,7 @@ import java.util.Properties;
 
 import javax.swing.AbstractAction;
 import javax.swing.JCheckBox;
+import javax.swing.JOptionPane;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
@@ -17,20 +18,28 @@ public class SpinVerifyHandler extends AbstractAction {
 		
 	public void actionPerformed(ActionEvent e) {
 			
-		Properties options = getOptions();
-		SpinModel model = SpinModel.getInstance();
-		SpinVerifyPanel panel = SpinVerifyPanel.getInstance();
-		String[] commands = model.getVerifyCommands(options);
-		String output = "";
-		panel.setCommandLineText("");
-		for( String command : commands )
+		try
 		{
-			panel.appendCommandLineText(command);
-			String curOutput = ProcessRunner.run(command,null,false);
-			panel.appendCommandLineText(curOutput);
-			output += curOutput;
+			Properties options = getOptions();
+			SpinModel model = SpinModel.getInstance();
+			SpinVerifyPanel panel = SpinVerifyPanel.getInstance();
+			String[] commands = model.getVerifyCommands(options);
+			String output = "";
+			panel.setCommandLineText("");
+			for( String command : commands )
+			{
+				panel.appendCommandLineText(command);
+				String curOutput = ProcessRunner.run(command,null,false);
+				panel.appendCommandLineText(curOutput);
+				output += curOutput;
+			}
+			model.extractVerificationInfo(output);
+			panel.setOutputText(model.getVerOutput());
 		}
-		model.extractVerificationInfo(output);
+		catch(Exception exc)
+		{
+			JOptionPane.showMessageDialog(null,exc.getMessage(),"Error Encountered",JOptionPane.ERROR_MESSAGE);
+		}
 	}
 	
 	//finds out all of the options that have been selected
