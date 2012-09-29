@@ -7,7 +7,10 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
+import java.util.Iterator;
+import java.util.Map;
 import java.util.Properties;
+import java.util.TreeMap;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
@@ -109,6 +112,11 @@ public class SpinModel {
 	{
 		return "Errors: " + verErrors + "\r\n\r\n" +
 				"Total Memory: " + verTotalMemory + "\r\n\r\n";
+	}
+	
+	public SpinGraph getSpinGraph()
+	{
+		return spinGraph;
 	}
 	
 	public String[] getVerifyCommands(Properties options) throws Exception
@@ -239,10 +247,16 @@ public class SpinModel {
 		else if( options.getProperty(SpinCommands.GUIDED_WITH_TRAIL).equals("true") )
 		{
 			command += " -k " + options.getProperty(SpinCommands.TRAIL_FILE);
+			String seedValue = options.getProperty(SpinCommands.SEED_VALUE);
+			if( seedValue != null && seedValue.length() > 0 )
+				command += " -n" + options.getProperty(SpinCommands.SEED_VALUE); 
 		}
 		else if( options.getProperty(SpinCommands.SIMPLE_WITH_TRAIL).equals("true") )
 		{
 			command = "spin -r -s -k " + options.getProperty(SpinCommands.TRAIL_FILE);
+			String seedValue = options.getProperty(SpinCommands.SEED_VALUE);
+			if( seedValue != null && seedValue.length() > 0 )
+				command += " -n" + options.getProperty(SpinCommands.SEED_VALUE);
 		}
 		
 		if( options.getProperty(SpinCommands.LOSES_NEW_MESSAGE).equals("true"))
@@ -291,9 +305,11 @@ public class SpinModel {
 				 + "[^:]*:([0-9]+)\\s*(\\S*)\\s+(\\S*)[^(]*\\([^_]*_([^)]*)\\)");
 
 		//capture all of the relevant lines from the sim output and extract the appropriate info
+		boolean cycle = false;
 		for( String str : simSplit )
 		{
-			if( str.indexOf("START OF CYCLE")!=-1 ) break;
+			if( str.indexOf("START OF CYCLE")!=-1 ) cycle = true;;
+			if( !cycle )continue;
 			Matcher m = p.matcher(str);
 			if(!m.find()) continue;
 			m = patExtractor.matcher(str);
@@ -312,7 +328,7 @@ public class SpinModel {
 			
 			//is this a send or receive action?
 			boolean send = true;
-			if( m.group(3).equals("Recv") ) send = false;
+			if( m.group(3).equals("Send") ) send = false;
 			else if( m.group(3).equals("[Recv]") ) continue;
 			
 			//what are the values being sent/received?
@@ -332,14 +348,58 @@ public class SpinModel {
 		 */
 		
 		String fileText = getFileText();
-		
-		for( SpinGraphElement element : spinGraph.getElements() )
+		String[] text = fileText.split("\n");
+		int lineNum = 1;
+		p = Pattern.compile("inline\\s+([^(]*)");
+		for( String str : text )
 		{
+			Matcher m = p.matcher(str);
+			if( m.find() )
+			{
+				String name = m.group(1);
+				String[] strArray = name.split("_");
+				name = strArray[strArray.length-1];
+				SpinGraphRectangle rectangle = new SpinGraphRectangle(name,lineNum);
+				spinGraph.addRectangle(rectangle);
+				spinGraph.addRectangleByName(rectangle);
+			}
+			lineNum++;
+		}
+		
+		//for efficiency create a lineNum range map before looping through the elements
+		Map<Integer,Integer> lineNumMap = new TreeMap<Integer,Integer>();
+		Iterator<Integer> itr = spinGraph.getRectangles().keySet().iterator();
+		Integer next = itr.next();
+		Integer following = null;
+		if( itr.hasNext() ) following = itr.next();
+		for( int i = 1 ; i < text.length ; i++ )
+		{
+			if( i < next.intValue() ) continue;
+			if( following == null ) lineNumMap.put(new Integer(i), next);
+			else if( i < following.intValue() )
+			{
+				lineNumMap.put(new Integer(i), next);
+			}
+			else
+			{
+				lineNumMap.put(new Integer(i), following);
+				next = following;
+				if( itr.hasNext() ) following = itr.next();
+				else following = null;
+			}
 			
 		}
 		
-
-		System.out.println(spinGraph);
+		//now we can easily link each element with the rectangle it points to
+		for( SpinGraphElement element : spinGraph.getElements().values() )
+		{
+			for( SpinGraphElement.SpinGraphEvent event : element.getEvents() )
+			{
+				lineNum = event.getLineNum();
+				event.setRectangle(spinGraph.getRectangle( lineNumMap.get(lineNum) ));
+			}
+		}
+		
 	}
 
 }

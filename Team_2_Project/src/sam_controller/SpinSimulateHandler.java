@@ -2,6 +2,7 @@
 package sam_controller;
 
 import java.awt.event.ActionEvent;
+import java.awt.Graphics;
 
 import java.util.Properties;
 
@@ -40,6 +41,7 @@ public class SpinSimulateHandler extends AbstractAction {
 			if( graph )
 			{
 				model.createSimGraph();
+				panel.repaint();
 			}
 		}
 		catch(Exception exc)
