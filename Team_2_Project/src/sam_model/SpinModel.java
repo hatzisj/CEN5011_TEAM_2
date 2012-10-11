@@ -7,7 +7,9 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.TreeMap;
@@ -21,6 +23,8 @@ public class SpinModel {
 	private String commandString;
 	private String verErrors;
 	private String verTotalMemory;
+	private String verStates;
+	private String verTime;
 	private String fileText = null;
 	private String simOutput;
 	
@@ -111,7 +115,9 @@ public class SpinModel {
 	public String getVerOutput()
 	{
 		return "Errors: " + verErrors + "\r\n\r\n" +
-				"Total Memory: " + verTotalMemory + "\r\n\r\n";
+				"Total Memory: " + verTotalMemory + "\r\n\r\n" +
+						"States Stored: " + verStates + "\r\n\r\n" +
+								"Time Elapsed: " + verTime + "\r\n\r\n";
 	}
 	
 	public SpinGraph getSpinGraph()
@@ -289,6 +295,18 @@ public class SpinModel {
 		m = p.matcher(input);
 		if(m.find()) verTotalMemory = m.group(1);
 		else verTotalMemory = "";
+		
+		//find the total number of states
+		p = Pattern.compile("([0-9]+)\\s*states,\\s*stored");
+		m = p.matcher(input);
+		if(m.find()) verStates = m.group(1);
+		else verStates = "";
+		
+		//find the total time elapsed
+		p = Pattern.compile("elapsed\\s*time\\s*([0-9]+\\.{0,1}[0-9]*)");
+		m = p.matcher(input);
+		if(m.find()) verTime = m.group(1);
+		else verTime = "";
 
 	}
 	
@@ -308,8 +326,8 @@ public class SpinModel {
 		boolean cycle = false;
 		for( String str : simSplit )
 		{
-			if( str.indexOf("START OF CYCLE")!=-1 ) cycle = true;;
-			if( !cycle )continue;
+			/*if( str.indexOf("START OF CYCLE")!=-1 ) cycle = true;;
+			if( !cycle )continue;*/
 			Matcher m = p.matcher(str);
 			if(!m.find()) continue;
 			m = patExtractor.matcher(str);
@@ -391,15 +409,14 @@ public class SpinModel {
 		}
 		
 		//now we can easily link each element with the rectangle it points to
-		for( SpinGraphElement element : spinGraph.getElements().values() )
+		for( SpinGraphElement element : spinGraph.getElementList() )
 		{
-			for( SpinGraphElement.SpinGraphEvent event : element.getEvents() )
-			{
-				lineNum = event.getLineNum();
-				event.setRectangle(spinGraph.getRectangle( lineNumMap.get(lineNum) ));
-			}
+			SpinGraphRectangle rectangle = spinGraph.getRectangle( lineNumMap.get(element.getLineNum() ) );
+			spinGraph.addConnection( new SpinGraphConnection( element , new SpinGraphRectangle(rectangle) ) );
 		}
 		
+		//make sure that the spinGraph is set up for painting
+		spinGraph.setUpForPaint();
 	}
 
 }

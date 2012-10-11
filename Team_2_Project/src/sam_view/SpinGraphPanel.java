@@ -14,8 +14,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import sam_model.SpinGraph;
+import sam_model.SpinGraphConnection;
 import sam_model.SpinGraphElement;
-import sam_model.SpinGraphElement.SpinGraphEvent;
 import sam_model.SpinGraphRectangle;
 import sam_model.SpinModel;
 
@@ -73,7 +73,44 @@ public class SpinGraphPanel extends JScrollPane {
 			if( spinGraph != null )
 			{
 				g.setColor(Color.BLACK);
-				//draw all of the circles
+				for( SpinGraphConnection connection : spinGraph.getConnections() )
+				{
+					SpinGraphRectangle rectangle = connection.getRectangle();
+					if( rectangle == null ) continue;
+					SpinGraphElement element = connection.getElement();
+					
+					int rectX = (int)rectangle.getCenter().getX();
+					int rectY = (int)rectangle.getCenter().getY();
+					int cirX = (int)element.getCenter().getX();
+					int cirY = (int)element.getCenter().getY();
+					int stringOffset = 15;
+					int lineOffset = 6;
+					int polySize = 5;
+					g.fillRect(rectX,rectY,SpinGraphRectangle.WIDTH,SpinGraphRectangle.HEIGHT );
+					g.drawOval(cirX,cirY,SpinGraphElement.RADIUS,SpinGraphElement.RADIUS);
+					g.drawString( rectangle.getName() , rectX , rectY - stringOffset );
+					g.drawString( element.getName() , cirX , cirY - stringOffset );
+					if( element.isSend() )
+					{
+						g.drawString( element.getValue() , cirX + SpinGraphElement.RADIUS + 10 , cirY + SpinGraphElement.RADIUS/2 );
+						g.drawLine( cirX + SpinGraphElement.RADIUS , cirY + SpinGraphElement.RADIUS/2 + lineOffset , 
+								rectX - SpinGraphRectangle.WIDTH/2 , cirY + SpinGraphElement.RADIUS/2 + lineOffset );
+						int[] x = {rectX,rectX-polySize,rectX-polySize};
+						int[] y = {cirY + SpinGraphElement.RADIUS/2 + lineOffset,cirY + SpinGraphElement.RADIUS/2 + lineOffset-polySize,cirY + SpinGraphElement.RADIUS/2 + lineOffset+polySize};
+						g.fillPolygon(x , y , 3);
+						
+					}
+					else
+					{
+						g.drawString( element.getValue() , rectX + SpinGraphRectangle.WIDTH/2 + 10 , rectY + SpinGraphRectangle.HEIGHT/2 );
+						g.drawLine( rectX + SpinGraphRectangle.WIDTH/2 , rectY + SpinGraphRectangle.HEIGHT/2 + lineOffset , 
+								cirX - SpinGraphElement.RADIUS/2 , rectY + SpinGraphRectangle.HEIGHT/2 + lineOffset );
+						int[] x = {cirX - SpinGraphElement.RADIUS/2,cirX - SpinGraphElement.RADIUS/2-polySize,cirX - SpinGraphElement.RADIUS/2-polySize};
+						int[] y = {rectY + SpinGraphRectangle.HEIGHT/2 + lineOffset,rectY + SpinGraphRectangle.HEIGHT/2 + lineOffset-polySize,rectY + SpinGraphRectangle.HEIGHT/2 + lineOffset+polySize};
+						g.fillPolygon(x , y , 3);
+					}
+				}
+				/*//draw all of the connections
 				for( SpinGraphElement element : spinGraph.getElements().values() )
 				{
 					int factor = Math.max(element.numInits(), element.numConns());
@@ -151,8 +188,7 @@ public class SpinGraphPanel extends JScrollPane {
 						
 						currentY += 60;
 					}
-				}
-				spinGraph.resetRectangleY();
+				}*/
 			}
 		}
 	}
