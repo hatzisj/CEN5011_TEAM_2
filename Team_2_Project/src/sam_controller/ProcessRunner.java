@@ -4,6 +4,7 @@ package sam_controller;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
+import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 
 public class ProcessRunner {
@@ -24,13 +25,15 @@ public class ProcessRunner {
 				output.append(line + "\n");
 				if(append)
 					area.setText(area.getText()+"\n"+line);
+				if(line.equals("spin: cannot find trail file"))
+					JOptionPane.showMessageDialog(null, "SPIN can not find the trail file", "Error" , JOptionPane.ERROR_MESSAGE);
 			}
 			bri.close();
 			p.waitFor();
 			
 	    }
 	    catch (Exception err) {
-	      err.printStackTrace();
+	    	JOptionPane.showMessageDialog(null, err.getMessage(), "Error" , JOptionPane.ERROR_MESSAGE);
 	    }
 		finally
 		{

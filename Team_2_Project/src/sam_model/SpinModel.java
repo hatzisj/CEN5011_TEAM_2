@@ -141,7 +141,7 @@ public class SpinModel {
 		if( options.getProperty(SpinCommands.GCC_3).equals("true")) gcc = SpinCommands.GCC_3;
 		else if( options.getProperty(SpinCommands.GCC_4).equals("true")) gcc = SpinCommands.GCC_4;
 		commands[1] = gcc + " -DMEMLIM=1024 -O2 -DXUSAFE";
-		commands[2] = "./pan -m10000";
+		commands[2] = "." + System.getProperty("file.separator") + "pan -m10000";
 		
 		String type = "";
 		boolean enforceWeak = false;
@@ -326,8 +326,7 @@ public class SpinModel {
 		boolean cycle = false;
 		for( String str : simSplit )
 		{
-			/*if( str.indexOf("START OF CYCLE")!=-1 ) cycle = true;;
-			if( !cycle )continue;*/
+			if( str.indexOf("START OF CYCLE")!=-1 ) cycle = true;
 			Matcher m = p.matcher(str);
 			if(!m.find()) continue;
 			m = patExtractor.matcher(str);
@@ -355,7 +354,7 @@ public class SpinModel {
 			//what is the name of the place?
 			String place = m.group(5);
 			
-			SpinGraphElement element = new SpinGraphElement(init , Integer.parseInt(lineNum) , send , values , place );
+			SpinGraphElement element = new SpinGraphElement(init , Integer.parseInt(lineNum) , send , values , place , cycle );
 			spinGraph.addElement(element);
 		}
 		

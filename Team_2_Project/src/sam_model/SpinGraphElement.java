@@ -15,14 +15,16 @@ public class SpinGraphElement implements Comparable<SpinGraphElement>{
 	private int lineNum;
 	private boolean init;
 	private boolean send;
+	private boolean cycle;
 	public static final int RADIUS = 40; 
 	
-	public SpinGraphElement(boolean init,int lineNum,boolean send,String strValues,String name) {
+	public SpinGraphElement(boolean init,int lineNum,boolean send,String strValues,String name,boolean cycle) {
 		String[] split = strValues.split(",");
 		this.name = name;
 		this.lineNum = lineNum;
 		this.send = send;
 		this.init = init;
+		this.cycle = cycle;
 		value = strValues;
 	}
 
@@ -49,6 +51,11 @@ public class SpinGraphElement implements Comparable<SpinGraphElement>{
 	public int getLineNum()
 	{
 		return lineNum;
+	}
+	
+	public boolean inCycle()
+	{
+		return cycle;
 	}
 	
 	public String toString()
