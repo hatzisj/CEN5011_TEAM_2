@@ -19,6 +19,11 @@ import sam_model.SpinGraphElement;
 import sam_model.SpinGraphRectangle;
 import sam_model.SpinModel;
 
+/**
+ * SpinGraphPanel extends the JScrollPane API and 
+ * displays a graphical representation of the simulation
+ * data
+ */
 public class SpinGraphPanel extends JScrollPane {
 	// singleton instance of SpinGraphPanel
 	private static SpinGraphPanel instance = null;
@@ -27,7 +32,10 @@ public class SpinGraphPanel extends JScrollPane {
 	private SpinGraphCanvas canvas;
 	private SpinModel model;
 	
-	// returns instance of SpinGraphPanel
+	/**
+	 * Returns a sinlgleton instance of the 
+	 * SpinGraphPane
+	 */
 	public static SpinGraphPanel getInstance() {
 		if (instance == null) {
 			instance = new SpinGraphPanel();
@@ -35,8 +43,10 @@ public class SpinGraphPanel extends JScrollPane {
 		return instance;
 	}
 
-	// private constructor for singleton
-	// sets up toolbars and menus
+	/**
+	 * Private constructor that sets appearance
+	 * of the SPIN graph panel
+	 */
 	private SpinGraphPanel() {
 		model = SpinModel.getInstance();
 		canvas = new SpinGraphCanvas(model,this);
@@ -49,12 +59,21 @@ public class SpinGraphPanel extends JScrollPane {
 		revalidate();
 	}
 	
+	/**
+	 * SpinGraphCanvas extends JPanel API
+	 * creates canvas for hosting graphical representation
+	 */
 	class SpinGraphCanvas extends JPanel
 	{
 		SpinModel model;
 		Dimension size;
 		SpinGraphPanel parent;
 		
+		/**
+		 * Public constructor
+		 * @param SpinModel
+		 * @param SpinGraphPanel as parent
+		 */
 		public SpinGraphCanvas (SpinModel model,SpinGraphPanel parent) {
 			this.model = model;
 			this.parent = parent;
@@ -62,10 +81,17 @@ public class SpinGraphPanel extends JScrollPane {
 			setSize(getPreferredSize());
 		}
 		
+		/**
+		 * @return Dimension size
+		 */
 		public Dimension getPreferredSize() {
 			 return size;
 		}
 		
+		/**
+		 * Draws out the actual representation
+		 * @param Graphic object
+		 */
 		public void paintComponent(Graphics g)
 		{
 			super.paintComponent(g);

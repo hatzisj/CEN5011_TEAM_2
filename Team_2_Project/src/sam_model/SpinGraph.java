@@ -9,6 +9,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+/**
+ * SpinGraph class stores the entities that 
+ * will be displayed by the graph
+ */
 public class SpinGraph {
 
 	List<SpinGraphElement> elementList;
@@ -24,56 +28,95 @@ public class SpinGraph {
 		connections = new ArrayList<SpinGraphConnection>();
 	}
 	
+	/**
+	 * Adds a specific SpinGraphElemenet to the SpinGraph
+	 * @param SpinGraphElement
+	 */
 	public void addElement(SpinGraphElement element)
 	{
 		elementList.add(element);
 	}
 	
+	/**
+	 * Adds rectangle object
+	 * @param SpinGraphRectangle
+	 */
 	public void addRectangle(SpinGraphRectangle rectangle)
 	{
 		rectanglesByNum.put(rectangle.getLineNum(),rectangle);
 	}
 	
+	/**
+	 * Adds rectangle object by name
+	 * @param SpinGraphRectangle 
+	 */
 	public void addRectangleByName(SpinGraphRectangle rectangle)
 	{
 		rectanglesByName.put(rectangle.getName(),rectangle);
 	}
 	
+	/**
+	 * @return List of SpinGraphElements
+	 */
 	public List<SpinGraphElement> getElementList()
 	{
 		return elementList;
 	}
 	
+	/**
+	 * @return Map 
+	 */
 	public Map<Integer,SpinGraphRectangle> getRectangles()
 	{
 		return rectanglesByNum;
 	}
 	
+	/**
+	 * @return Map by name
+	 */
 	public Map<String,SpinGraphRectangle> getRectanglesByName()
 	{
 		return rectanglesByName;
 	}
 	
+	/**
+	 * @return SpinGraphRectangle
+	 * @param integer line number
+	 */
 	public SpinGraphRectangle getRectangle(Integer lineNum)
 	{
 		return rectanglesByNum.get(lineNum);
 	}
 	
+	/**
+	 * @return SpinGraphRectangle by name
+	 * @param string name
+	 */
 	public SpinGraphRectangle getRectangle(String name)
 	{
 		return rectanglesByName.get(name);
 	}
 
+	/**
+	 * Adds a SpinGraphConnection to current connections
+	 * @param SpinGraphConnection
+	 */
 	public void addConnection(SpinGraphConnection connection)
 	{
 		connections.add(connection);
 	}
 	
+	/**
+	 * @return a list of SpinGraphConnection
+	 */
 	public List<SpinGraphConnection> getConnections()
 	{
 		return connections;
 	}
 	
+	/**
+	 * Sets up the default appearence of panel
+	 */
 	public void setUpForPaint()
 	{
 		int yOffset = 80;
@@ -101,6 +144,11 @@ public class SpinGraph {
 		}
 	}
 	
+	/**
+	 * Standard toString method for 
+	 * the connection string
+	 * @return connection string
+	 */
 	public String toString()
 	{
 		return connections.toString();

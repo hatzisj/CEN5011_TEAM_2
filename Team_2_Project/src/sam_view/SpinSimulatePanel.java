@@ -22,6 +22,11 @@ import javax.swing.SwingConstants;
 import sam_model.SpinCommands;
 import sam_controller.SpinSimulateHandler;
 
+/**
+ * SpinSimulatePanel extends the JScrollPaine API and
+ * is used for selecting options for running the simulation
+ * and for displaying the output
+ */
 public class SpinSimulatePanel extends JScrollPane {
 	// singleton instance of SpinSimulatePanel
 	private static SpinSimulatePanel instance = null;
@@ -54,8 +59,11 @@ public class SpinSimulatePanel extends JScrollPane {
 		return instance;
 	}
 
-	// private constructor for singleton
-	// sets up toolbars and menus
+	/**
+	 * Private singleton constructor that sets
+	 * up the panes and the controls for the simoulte
+	 * interface
+	 */
 	private SpinSimulatePanel() {
 		panel = new JPanel();
 		panel.setBorder(BorderFactory.createLineBorder(Color.BLACK, BORDER_THICKNESS));
@@ -81,7 +89,10 @@ public class SpinSimulatePanel extends JScrollPane {
 		panel.add(innerPanel,BorderLayout.CENTER);
 	}
 	
-	//sets up the area to choose options
+	/**
+	 * Sets up the default options for the simulate panel
+	 * 
+	 */
 	private void setUpOptions()
 	{
 		optionsPanel = new JPanel();
@@ -162,11 +173,21 @@ public class SpinSimulatePanel extends JScrollPane {
 		panel.add(innerPanel,BorderLayout.NORTH);
 	}
 	
+	/**
+	 * Sets the trail file to be used
+	 * @param string name of the trail file
+	 */
 	public void setTrailFile(String file)
 	{
 		txtTrail.setText(file);
 	}
 	
+	/**
+	 * Creates listener to hand the events of the SPIN
+	 * commands
+	 * @param boolean value if graph
+	 * @return AbstractAction object
+	 */
 	private AbstractAction setUpListener(boolean graph)
 	{
 		AbstractAction handler = new SpinSimulateHandler(graph);
@@ -182,21 +203,38 @@ public class SpinSimulatePanel extends JScrollPane {
 		return handler;
 	}
 	
+	/**
+	 * Sets the value of the command line text box
+	 * @param Command line string
+	 */
 	public void setCommandLineText(String text)
 	{
 		txtCommandLine.setText(text);
 	}
 	
+	/**
+	 * Appends additional command line arguments
+	 * to an existing command line
+	 * @param string command line arguments
+	 */
 	public void appendCommandLineText(String text)
 	{
 		txtCommandLine.setText(txtCommandLine.getText()+"\n"+text);
 	}
 	
+	/**
+	 * Sets the text output string
+	 * @param string output text
+	 */
 	public void setOutputText(String text)
 	{
 		txtOutput.setText(text);
 	}
 	
+	/**
+	 * Returns the output text
+	 * @return JTextArea object
+	 */
 	public JTextArea getOutputText()
 	{
 		return txtOutput;

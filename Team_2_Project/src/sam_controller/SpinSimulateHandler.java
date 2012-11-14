@@ -15,17 +15,32 @@ import javax.swing.JTextField;
 import sam_model.SpinModel;
 import sam_view.SpinSimulatePanel;
 
+/**
+ *  The SpinSimulatHandler class extends the AbstractAction API
+ *  and creates the batch scripts for the simulation
+ */
 public class SpinSimulateHandler extends AbstractAction {
 	
 	//whether or not the user wants to create a graph
 	private boolean graph;
 	
+	/**
+	 * Public constructor that takes in a boolean value
+	 * and uses the super class constructor
+	 * @param boolean value of graph
+	 */
 	public SpinSimulateHandler(boolean graph)
 	{
 		super();
 		this.graph = graph;
 	}
 	
+	/**
+	 * the actionPerformed event handler, after recieving 
+	 * an ActionEvent will create necessary panels and models
+	 * for SPIN
+	 * @param ActionEvent
+	 */
 	public void actionPerformed(ActionEvent e) {
 		try
 		{
@@ -51,7 +66,12 @@ public class SpinSimulateHandler extends AbstractAction {
 		}
 	}
 	
-	//finds out all of the options that have been selected
+	/**
+	 * getOptions will return all of the options that
+	 * the user has selected when it comes to running the
+	 * tests in SPIN
+	 * @return Properties object that contains options selections
+	 */
 	private Properties getOptions()
 	{
 		Properties options = new Properties();

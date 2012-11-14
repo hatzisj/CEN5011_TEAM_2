@@ -3,6 +3,10 @@ package sam_model;
 
 import java.util.Properties;
 
+/**
+ * SpinCommands class contains all of the static
+ * variables used with many of eSAMAT's classes
+ */
 public class SpinCommands {
 
 	//all commands on the verify panel

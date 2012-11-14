@@ -23,6 +23,10 @@ import javax.swing.SwingConstants;
 import sam_controller.SpinVerifyHandler;
 import sam_model.SpinCommands;
 
+/**
+ * SpinVerifyPanel extends the JScrollPane API and
+ * is used for verification results
+ */
 public class SpinVerifyPanel extends JScrollPane {
 	// singleton instance of SpinSimulatePanel
 	private static SpinVerifyPanel instance = null;
@@ -91,8 +95,10 @@ public class SpinVerifyPanel extends JScrollPane {
 		return instance;
 	}
 
-	// private constructor for singleton
-	// sets up toolbars and menus
+	/**
+	 * Private constructor that initializes buttons
+	 * and option buttons
+	 */
 	private SpinVerifyPanel() {
 		panel = new JPanel();
 		panel.setBorder(BorderFactory.createLineBorder(Color.BLACK, BORDER_THICKNESS));
@@ -118,7 +124,9 @@ public class SpinVerifyPanel extends JScrollPane {
 		panel.add(innerPanel,BorderLayout.CENTER);
 	}
 	
-	//sets up the area to choose options
+	/**
+	 *  Initialize the options to their default state
+	 */
 	private void setUpOptions()
 	{
 		optionsPanel = new JPanel();
@@ -276,6 +284,10 @@ public class SpinVerifyPanel extends JScrollPane {
 		panel.add(innerPanel,BorderLayout.NORTH);
 	}
 	
+	/**
+	 * Creates the listener that will handle the 
+	 * different events that can occur
+	 */
 	private AbstractAction setUpListener()
 	{
 		AbstractAction handler = new SpinVerifyHandler();
@@ -310,21 +322,39 @@ public class SpinVerifyPanel extends JScrollPane {
 		return handler;
 	}
 	
+	/**
+	 *  Sets the string of the text box of 
+	 *  the output
+	 *  @param string output
+	 */
 	public void setFileText(String text)
 	{
 		txtOutput.setText(text);
 	}
 	
+	/**
+	 *  Sets the string command line of the text box
+	 *  @param string command line
+	 */
 	public void setCommandLineText(String text)
 	{
 		txtCommandLine.setText(text);
 	}
 	
+	/**
+	 * Appends additional command line arguments to 
+	 * existing command line
+	 * @param string command line
+	 */
 	public void appendCommandLineText(String text)
 	{
 		txtCommandLine.setText(txtCommandLine.getText() + "\n" + text);
 	}
 	
+	/**
+	 * sets the output text
+	 * @param string text output
+	 */
 	public void setOutputText(String text)
 	{
 		txtOutput.setText(text);

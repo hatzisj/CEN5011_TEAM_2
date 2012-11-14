@@ -16,10 +16,20 @@ import sam_view.SpinFrame;
 import sam_view.SpinSimulatePanel;
 import sam_view.SpinVerifyPanel;
 
+/**
+ * The SpinFileHandler extends the AbstractionAction API
+ * and allows the end user to open a file to use the SPIN
+ */
 public class SpinFileHandler extends AbstractAction {
-		
-	public void actionPerformed(ActionEvent e) {
-				
+	
+	/**
+	 * actionPerformed is a handler for creating instances
+	 * of many of the singleton classes that will be used
+	 * to run tests
+	 * 
+	 * @param ActionEvent 
+	 */
+	public void actionPerformed(ActionEvent e) {				
 		
 		FileDialog dlg = new FileDialog(SpinFrame.getInstance(), "Open File", FileDialog.LOAD);
 
@@ -28,9 +38,9 @@ public class SpinFileHandler extends AbstractAction {
 	    
 		dlg.setVisible(true);
 
-		SpinModel model = SpinModel.getInstance();
-		SpinFilePanel filePanel = SpinFilePanel.getInstance();
-		SpinVerifyPanel verifyPanel = SpinVerifyPanel.getInstance();
+		SpinModel model 				= SpinModel.getInstance();
+		SpinFilePanel filePanel 		= SpinFilePanel.getInstance();
+		SpinVerifyPanel verifyPanel 	= SpinVerifyPanel.getInstance();
 		SpinSimulatePanel simulatePanel = SpinSimulatePanel.getInstance();
 		model.setFile( new File(dlg.getDirectory() + dlg.getFile()) );
 		try

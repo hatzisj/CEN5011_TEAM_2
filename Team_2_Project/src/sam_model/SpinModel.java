@@ -16,6 +16,11 @@ import java.util.TreeMap;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
+/**
+ * SpinModel class is the entity that stores all of the
+ * information(file, graphic and script information),
+ * that is used to run the information
+ */
 public class SpinModel {
 
 	private static SpinModel spinModel;
@@ -30,21 +35,36 @@ public class SpinModel {
 	
 	private File promelaFile = null;
 	
+	/**
+	 * Returns a singleton instance of a
+	 * SpinModel object
+	 */
 	public static SpinModel getInstance()
 	{
 		if( spinModel == null ) spinModel = new SpinModel();
 		return spinModel;
 	}
 	
+	/**
+	 * Public Constructor
+	 */
 	public SpinModel() {
 
 	}
 	
+	/**
+	 * Sets the promelaFile object
+	 * @param File object
+	 */
 	public void setFile(File file)
 	{
 		promelaFile = file;
 	}
 	
+	/**
+	 * Returns the content of the file
+	 * @return string text of the file
+	 */
 	public String getFileText() throws Exception
 	{
 		if( fileText == null )
@@ -72,46 +92,79 @@ public class SpinModel {
 		
 	}
 	
+	/**
+	 * Sets the command string
+	 * @param command string
+	 */
 	public void setCommandString(String s)
 	{
 		commandString = s;
 	}
 	
+	/**
+	 * @return commandString
+	 */
 	public String getCommandString()
 	{
 		return commandString;
 	}
 	
+	/**
+	 * Given a string, sets the verErrors variable
+	 * @param error string 
+	 */
 	public void setVerErrors(String str)
 	{
 		verErrors = str;
 	}
 	
+	/**
+	 * @return verErrors string
+	 * 
+	 */
 	public String getVerErrors()
 	{
 		return verErrors;
 	}
 	
+	/**
+	 * Given a string, sets the value of 
+	 * total memory
+	 * @param verTotalMemory string
+	 */
 	public void setVerTotalMemory(String str)
 	{
 		verTotalMemory = str;
 	}
 	
+	/**
+	 * @return verTotalMemory string
+	 */
 	public String getVerTotalMemory()
 	{
 		return verTotalMemory;
 	}
 	
+	/**
+	 * Given a string, sets the simOutput
+	 * @param sim ouput string
+	 */
 	public void setSimOutput(String str)
 	{
 		simOutput = str;
 	}
 	
+	/**
+	 * @return sim output string
+	 */
 	public String getSimOutput()
 	{
 		return simOutput;
 	}
 	
+	/**
+	 * @return string output of verify results
+	 */
 	public String getVerOutput()
 	{
 		return "Errors: " + verErrors + "\r\n\r\n" +
@@ -120,11 +173,21 @@ public class SpinModel {
 								"Time Elapsed: " + verTime + "\r\n\r\n";
 	}
 	
+	/**
+	 * @return spin graph object
+	 */
 	public SpinGraph getSpinGraph()
 	{
 		return spinGraph;
 	}
 	
+	/**
+	 * Given the Properties object that contains 
+	 * the user options, this method will return a
+	 * string array of verify commands
+	 * @param Properties object that contains user options
+	 * @return String array of verify commands
+	 */
 	public String[] getVerifyCommands(Properties options) throws Exception
 	{
 		String[] commands = new String[3];
@@ -242,6 +305,12 @@ public class SpinModel {
 		return commands;
 	}
 	
+	/**
+	 * Given a Properties object, this method
+	 * will return a string of simulate commands
+	 * @param Properties object that contains user options
+	 * @return String representation of simulate commands
+	 */
 	public String getSimulateCommands(Properties options) throws Exception
 	{
 		String command = "spin -p -s -r -X -v -l -g -u10000";
@@ -282,6 +351,12 @@ public class SpinModel {
 		return command;
 	}
 	
+	/**
+	 * Given a string of user input, this method
+	 * will obtain the verification information 
+	 * based on the input
+	 * @param input string
+	 */
 	public void extractVerificationInfo(String input)
 	{
 		//find how many errors there are
@@ -310,6 +385,10 @@ public class SpinModel {
 
 	}
 	
+	/**
+	 * createSimGraph will create the model of the 
+	 * sim graph
+	 */
 	public void createSimGraph() throws Exception
 	{
 		

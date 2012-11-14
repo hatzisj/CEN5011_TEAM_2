@@ -17,6 +17,10 @@ import javax.swing.event.MouseInputListener;
 import sam_model.SamModelObject;
 import sam_view.SamFrame;
 
+/**
+ * The SelectionHandler class implements the FocusListener and MouseInputListner
+ * classes and handles the mouse function events
+ */
 public class SelectionHandler implements FocusListener, MouseInputListener {
 
 	@Override

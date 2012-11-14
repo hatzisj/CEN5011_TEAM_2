@@ -11,6 +11,10 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
+/**
+ * SpinFilePanel extends JScrollPane and displayse the
+ * file content of the file that the user opens
+ */
 public class SpinFilePanel extends JScrollPane {
 	// singleton instance of SpinFilePanel
 	private static SpinFilePanel instance = null;
@@ -19,7 +23,12 @@ public class SpinFilePanel extends JScrollPane {
 	private JPanel panel;
 	private JTextArea textArea;
 	
-	// returns instance of SpinFilePanel
+	/**
+	 * This method returns an singleton instance of
+	 * a SpinFilePanel object
+	 * 
+	 * @return SpinFilePanel instance
+	 */
 	public static SpinFilePanel getInstance() {
 		if (instance == null) {
 			instance = new SpinFilePanel();
@@ -27,8 +36,10 @@ public class SpinFilePanel extends JScrollPane {
 		return instance;
 	}
 
-	// private constructor for singleton
-	// sets up toolbars and menus
+	/**
+	 * Private singleton constructor that
+	 * sets up toolbars amd menus 
+	 */
 	private SpinFilePanel() {
 		panel = new JPanel();
 		panel.setBackground(Color.WHITE);
@@ -46,6 +57,10 @@ public class SpinFilePanel extends JScrollPane {
 		panel.add(new JScrollPane(textArea));
 	}
 	
+/**
+ * Setter for the text area
+ * @param string of random size
+ */
 	public void setText(String text)
 	{
 		textArea.setText(text);

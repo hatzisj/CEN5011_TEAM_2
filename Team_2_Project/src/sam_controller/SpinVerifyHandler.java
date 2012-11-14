@@ -14,8 +14,18 @@ import javax.swing.JTextField;
 import sam_model.SpinModel;
 import sam_view.SpinVerifyPanel;
 
+/**
+ * SpinVerifyHandler class extends the AbstractAction API
+ * and it creates the batch scripts for verification 
+ */
 public class SpinVerifyHandler extends AbstractAction {
-		
+	
+	/**
+	 * the actionPerformed event handler, after recieving 
+	 * an ActionEvent will create necessary panels and models
+	 * for SPIN
+	 * @param ActionEvent
+	 */
 	public void actionPerformed(ActionEvent e) {
 			
 		try
@@ -42,7 +52,13 @@ public class SpinVerifyHandler extends AbstractAction {
 		}
 	}
 	
-	//finds out all of the options that have been selected
+	/**
+	 * getOptions will return all of the options that
+	 * the user has selected when it comes to running the
+	 * tests in SPIN
+	 * 
+	 * @return Properties object that contains options selections
+	 */
 	private Properties getOptions()
 	{
 		Properties options = new Properties();

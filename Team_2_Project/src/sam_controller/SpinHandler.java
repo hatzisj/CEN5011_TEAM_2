@@ -15,8 +15,20 @@ import javax.swing.JTextField;
 
 import sam_view.SpinFrame;
 
+/**
+ * SpinHandler class extends the AbstractAction API
+ * and is for handling the content
+ * of the file that was opened
+ */
 public class SpinHandler extends AbstractAction {
-		
+	
+	/**
+	 * The actionPerformed methiod is an event handler
+	 * that will set paramaters based of the file content
+	 * that was opened
+	 * 
+	 * @param ActionEvent object 
+	 */
 	public void actionPerformed(ActionEvent e) {
 		
 		String strFile = ( (JTextField)getValue("file") ).getText();
@@ -95,6 +107,12 @@ public class SpinHandler extends AbstractAction {
 		
 	}
 	
+	/**
+	 * The run method, given a command in string format
+	 * will execute as a command line operation 
+	 * 
+	 * @return string output from command line operation
+	 */
 	private String run(String command)
 	{
 		String out = "";

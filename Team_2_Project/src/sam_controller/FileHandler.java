@@ -21,17 +21,32 @@ import sam_view.SamCanvas;
 import sam_view.SamFrame;
 import sam_view.SamFrame.Toggle;
 
+/**
+ * FileHandler class extends the AbstractAction API
+ * and it handles the options that are chosen for the 
+ * file that is selected
+ */
 public class FileHandler extends AbstractAction {
 	private int count = 0;
 	int actionType;
 	JButton btn;
 	JMenuItem mtm;
 	
+	/**
+	 * Public constructor 
+	 */
 	public FileHandler() {
 		putValue(NAME, "FileButtonHandler");
 		putValue(SHORT_DESCRIPTION, "Handles button click from file toolbar or menuitem");
 	}
 	
+	/**
+	 * the actionPerformed event handler, after recieving 
+	 * an ActionEvent and depending on which button is selected
+	 * will execute the corresponding file action
+	 * 
+	 * @param ActionEvent button press
+	 */
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() instanceof JButton){
 			btn = (JButton) e.getSource();
@@ -50,10 +65,8 @@ public class FileHandler extends AbstractAction {
 			else if(mtm.getName().compareTo("close") == 0)actionType =4;
 		}else{
 			//do nothing
-		}
-		
-		
-		
+		}	
+				
 		if(actionType == 1){
 			count++;
 			SamFrame.getInstance().addTab("tab" + count);
@@ -98,10 +111,8 @@ public class FileHandler extends AbstractAction {
 				}
 			} catch (Throwable e1) {
 				e1.printStackTrace();
-			}
-			
-			
-			
+			}		
+						
 		}
 		
 		else if(actionType == 4){

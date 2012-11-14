@@ -15,6 +15,10 @@ import javax.swing.JButton;
 
 import sam_view.SpinFrame;
 
+/**
+ * The SpinPopupHandler class extends the AbstractAction API
+ * and opens the SPIN framework
+ */
 public class SpinPopupHandler extends AbstractAction {
 	
 	JButton btn;
@@ -31,11 +35,19 @@ public class SpinPopupHandler extends AbstractAction {
 		
 	}
 	
+	/**
+	 * Gets the SpinFrame instance and sets its 
+	 * visiblity to true
+	 */
 	private void modelToSpinWindow() {
 		SpinFrame spinFrame = SpinFrame.getInstance();
 		spinFrame.setVisible(true);
 	}
 	
+	/**
+	 * getName returns the module name
+	 * @return string module name
+	 */
 	  public String getName() {
 	      return MODULE_NAME;
 	   }

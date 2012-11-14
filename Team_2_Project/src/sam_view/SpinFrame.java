@@ -23,6 +23,9 @@ import javax.swing.JToolBar;
 import sam_controller.SpinFileHandler;
 import sam_controller.SpinHandler;
 
+/**
+ * SpinFrame is the parent view class and extends the JFrame API
+ */
 public class SpinFrame extends JFrame {
 	// singleton instance of SpinFrame
 	private static SpinFrame instance = null;
@@ -53,7 +56,11 @@ public class SpinFrame extends JFrame {
 	
 	private JTabbedPane pane;
 	
-	// returns instance of SpinFrame
+
+	/**
+	 * This is a singleton accessor of the SpinFrame class
+	 * @return instance of SpinFrame
+	 */
 	public static SpinFrame getInstance() {
 		if (instance == null) {
 			instance = new SpinFrame();
@@ -61,8 +68,11 @@ public class SpinFrame extends JFrame {
 		return instance;
 	}
 
-	// private constructor for singleton
-	// sets up toolbars and menus
+	
+	/**
+	 * private constructor for singleton 
+	 * that sets up toolbars and menus
+	 */
 	private SpinFrame() {
 		setTitle("SPIN Analysis Tool");
 		this.setName("frameSPIN");
@@ -88,6 +98,9 @@ public class SpinFrame extends JFrame {
 
 	}
 	
+	/**
+	 * Sets up the toolbars for JPanel
+	 */
 	public void setupToolbars() {
 		JPanel panelToolBars = new JPanel();
 		getContentPane().add(panelToolBars, BorderLayout.NORTH);
@@ -96,6 +109,11 @@ public class SpinFrame extends JFrame {
 		setupToolbarsFile(panelToolBars);
 	}
 
+	/**
+	 * Sets up the tool bars for File panel
+	 * 
+	 * @param JPanel 
+	 */
 	public void setupToolbarsFile(JPanel panelToolBars) {
 		JToolBar toolBarFile = new JToolBar();
 		toolBarFile.setFloatable(false);
@@ -113,7 +131,10 @@ public class SpinFrame extends JFrame {
 		btnFileChooser.addActionListener(new SpinFileHandler());
 	}
 	
-	//this function will add all the checkboxes to the frame
+	/**
+	 * This method adds all the check boxes for the
+	 * options that the user can make
+	 */
 	private void addCheckBoxes()
 	{
 		JPanel panel = new JPanel( new GridLayout(14,1) );
@@ -163,7 +184,10 @@ public class SpinFrame extends JFrame {
 		add(panel, BorderLayout.WEST);
 	}
 	
-	//This function will add the buttons
+	/**
+	 * This method will add all the buttons to the 
+	 * interface
+	 */
 	private void addButtons()
 	{
 		btnRunSpin = new JButton("Run the SPIN application");
