@@ -10,7 +10,7 @@ import sam_view.SamFrame;
  */
 public class RunGui{
 
-   
+ 
   public static void main(String args[]){
   	try{
   		System.setProperty("file.separator","/");
